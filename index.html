@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oranthor – The Decentralized Light Network</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#00F0FF',secondary:'#B026FF'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0B1E;
+            color: #E5E5E5;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #00F0FF, #B026FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .glow {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.2);
+        }
+        
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(176, 38, 255, 0.5), 0 0 30px rgba(176, 38, 255, 0.2);
+        }
+        
+        .glass {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 11, 30, 0.7);
+        }
+        
+        .hero-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(10, 11, 30, 0.8) 0%, #0A0B1E 100%);
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.5), rgba(176, 38, 255, 0.5), transparent);
+        }
+        
+        .card {
+            background: rgba(20, 21, 40, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 240, 255, 0.3);
+        }
+        
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00F0FF, #B026FF);
+        }
+        
+        .timeline-line {
+            width: 2px;
+            background: linear-gradient(to bottom, #00F0FF, #B026FF);
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 240, 255, 0.5);
+            border-radius: 4px;
+            position: relative;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: rgba(0, 240, 255, 0.8);
+        }
+        
+        .custom-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 6px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(20, 21, 40, 0.7);
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .switch-slider {
+            background: linear-gradient(90deg, #00F0FF, #B026FF);
+        }
+        
+        input:checked + .switch-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .custom-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(20, 21, 40, 0.7);
+            outline: none;
+        }
+        
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00F0FF, #B026FF);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+        }
+        
+        .custom-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00F0FF, #B026FF);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            border: none;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="text-2xl font-['Pacifico'] text-white">Oranthor</a>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="text-white hover:text-primary transition-colors">About</a>
+                <a href="#how-it-works" class="text-white hover:text-primary transition-colors">How It Works</a>
+                <a href="#tokens" class="text-white hover:text-primary transition-colors">Tokens</a>
+                <a href="#tokenomics" class="text-white hover:text-primary transition-colors">Tokenomics</a>
+                <a href="#roadmap" class="text-white hover:text-primary transition-colors">Roadmap</a>
+                <a href="#faq" class="text-white hover:text-primary transition-colors">FAQ</a>
+            </div>
+            
+            <button class="hidden md:flex items-center justify-center px-6 py-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-black transition-all duration-300 !rounded-button whitespace-nowrap glow">
+                Connect Wallet
+            </button>
+            
+            <button id="mobileMenuButton" class="md:hidden w-10 h-10 flex items-center justify-center text-white">
+                <i class="ri-menu-line ri-lg"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden w-full mt-4 pb-4">
+            <div class="flex flex-col space-y-4">
+                <a href="#about" class="text-white hover:text-primary transition-colors">About</a>
+                <a href="#how-it-works" class="text-white hover:text-primary transition-colors">How It Works</a>
+                <a href="#tokens" class="text-white hover:text-primary transition-colors">Tokens</a>
+                <a href="#tokenomics" class="text-white hover:text-primary transition-colors">Tokenomics</a>
+                <a href="#roadmap" class="text-white hover:text-primary transition-colors">Roadmap</a>
+                <a href="#faq" class="text-white hover:text-primary transition-colors">FAQ</a>
+                <button class="flex items-center justify-center px-6 py-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-black transition-all duration-300 !rounded-button whitespace-nowrap w-full">
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20 pb-16 px-6 hero-bg overflow-hidden">
+        <div id="particles-container" class="particles"></div>
+        
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                    <span class="gradient-text">Oranthor</span> – The Decentralized Light Network
+                </h1>
+                
+                <p class="text-xl md:text-2xl font-light text-gray-300 font-['Space_Grotesk']">
+                    Send money in 1 second. No banks, no gas fees, no middlemen.
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button class="px-8 py-3 bg-primary text-black font-semibold transition-all duration-300 hover:scale-105 !rounded-button whitespace-nowrap glow">
+                        Join Presale
+                    </button>
+                    
+                    <button class="px-8 py-3 bg-transparent border border-white text-white font-semibold transition-all duration-300 hover:border-primary hover:text-primary !rounded-button whitespace-nowrap">
+                        Read Whitepaper
+                    </button>
+                </div>
+            </div>
+            
+            <div class="relative h-80 lg:h-full">
+                <div id="network-sphere" class="w-full h-full flex items-center justify-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/10">
+                        <div class="absolute w-48 h-48 md:w-60 md:h-60 rounded-full bg-gradient-to-tr from-primary/30 to-secondary/30 border border-white/10"></div>
+                        <div class="absolute w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-r from-primary/40 to-secondary/40 border border-white/10 flex items-center justify-center">
+                            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-b from-primary to-secondary glow-purple flex items-center justify-center">
+                                <span class="text-white font-bold text-xl">ORR</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Orbiting Nodes -->
+                        <div id="orbiting-nodes"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0A0B1E] to-transparent"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                About <span class="gradient-text">Oranthor</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative h-80 lg:h-96">
+                    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                        <div class="relative w-full max-w-md h-full">
+                            <!-- Network Visualization -->
+                            <div id="network-visualization" class="w-full h-full"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <p class="text-lg leading-relaxed">
+                        <span class="gradient-text font-semibold">Oranthor</span> is a peer-to-peer financial network where every mobile device becomes a node. It enables lightning-fast, anonymous transactions without central servers.
+                    </p>
+                    
+                    <p class="text-lg leading-relaxed">
+                        Powered by <span class="text-primary font-semibold">$ORR</span> and fiat-pegged <span class="text-secondary font-semibold">ORX tokens</span>, Oranthor removes all friction from modern payments.
+                    </p>
+                    
+                    <p class="text-lg leading-relaxed">
+                        Our vision is to create a truly decentralized financial ecosystem that works seamlessly across borders, devices, and currencies.
+                    </p>
+                    
+                    <div class="pt-4">
+                        <a href="#how-it-works" class="inline-flex items-center text-primary hover:underline">
+                            Learn how it works
+                            <i class="ri-arrow-right-line ri-lg ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 px-6 relative bg-[#0C0D20]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                How <span class="gradient-text">It Works</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-16 h-16 flex items-center justify-center mb-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full">
+                        <i class="ri-link-m-line ri-2x text-primary"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-4">Peer-to-Peer Protocol</h3>
+                    
+                    <p class="text-gray-300">
+                        Uses quorum validation (k/n) to verify transactions without a central authority, ensuring security and speed.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-16 h-16 flex items-center justify-center mb-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full">
+                        <i class="ri-wallet-3-line ri-2x text-primary"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-4">One-Tap Wallets</h3>
+                    
+                    <p class="text-gray-300">
+                        Wallets created in 1 tap, no KYC required. Instant access to the Oranthor ecosystem.
+                    </p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-16 h-16 flex items-center justify-center mb-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full">
+                        <i class="ri-lock-password-line ri-2x text-primary"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-4">Encrypted Balances</h3>
+                    
+                    <p class="text-gray-300">
+                        Using AES-256 + Shamir Secret Sharing to ensure your funds remain private and secure at all times.
+                    </p>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="card p-6 rounded-lg">
+                    <div class="w-16 h-16 flex items-center justify-center mb-6 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full">
+                        <i class="ri-database-2-line ri-2x text-primary"></i>
+                    </div>
+                    
+                    <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-4">Dynamic Node Expansion</h3>
+                    
+                    <p class="text-gray-300">
+                        No global blockchain needed. Shard storage using Arweave + Bundlr for efficient data management.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Overview -->
+    <section id="tokens" class="py-20 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                Token <span class="gradient-text">Overview</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- ORR Token -->
+                <div class="card p-8 rounded-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full -mr-20 -mt-20"></div>
+                    
+                    <div class="relative">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-r from-primary to-primary/50 rounded-full mr-4">
+                                <span class="text-black font-bold text-xl">ORR</span>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-['Space_Grotesk'] font-bold">$ORR</h3>
+                                <p class="text-gray-300">Native Token</p>
+                            </div>
+                        </div>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-primary mt-1 mr-3"></i>
+                                <span>Fixed supply: 1 billion ORR</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-primary mt-1 mr-3"></i>
+                                <span>Used for staking, governance, and collateral</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-primary mt-1 mr-3"></i>
+                                <span>Powers the Oranthor Quorum Engine (OQCE)</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-primary mt-1 mr-3"></i>
+                                <span>Not used for direct payments</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-8">
+                            <button class="px-6 py-2 bg-transparent border border-primary text-primary hover:bg-primary hover:text-black transition-all duration-300 !rounded-button whitespace-nowrap">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ORX Tokens -->
+                <div class="card p-8 rounded-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-secondary/10 rounded-full -mr-20 -mt-20"></div>
+                    
+                    <div class="relative">
+                        <div class="flex items-center mb-6">
+                            <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-r from-secondary to-secondary/50 rounded-full mr-4">
+                                <span class="text-black font-bold text-xl">ORX</span>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-['Space_Grotesk'] font-bold">ORX</h3>
+                                <p class="text-gray-300">Fiat-pegged Stable Tokens</p>
+                            </div>
+                        </div>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-secondary mt-1 mr-3"></i>
+                                <span>ORV = 1 VND, ORU = 1 USD, ORE = 1 EUR</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-secondary mt-1 mr-3"></i>
+                                <span>Used for daily transactions and value transfer</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-secondary mt-1 mr-3"></i>
+                                <span>Minted by locking ORR with 150% collateral ratio</span>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <i class="ri-check-line ri-lg text-secondary mt-1 mr-3"></i>
+                                <span>Always stable, zero gas fees</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-8">
+                            <button class="px-6 py-2 bg-transparent border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-300 !rounded-button whitespace-nowrap">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <a href="#tokenomics" class="inline-flex items-center text-primary hover:underline">
+                    View Tokenomics
+                    <i class="ri-arrow-down-line ri-lg ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section id="tokenomics" class="py-20 px-6 relative bg-[#0C0D20]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                <span class="gradient-text">Tokenomics</span>
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Chart -->
+                <div class="h-80 md:h-96">
+                    <div id="tokenomics-chart" class="w-full h-full"></div>
+                </div>
+                
+                <!-- Distribution Details -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-['Space_Grotesk'] font-semibold mb-6">
+                        Fixed Supply: 1,000,000,000 ORR
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Public Sale -->
+                        <div class="card p-4 rounded-lg border-l-4 border-l-[#57B5E7]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold">Public Sale</h4>
+                                <span class="text-[#57B5E7] font-bold">30%</span>
+                            </div>
+                            <p class="text-sm text-gray-300">300,000,000 ORR</p>
+                        </div>
+                        
+                        <!-- Treasury -->
+                        <div class="card p-4 rounded-lg border-l-4 border-l-[#8DD3C7]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold">Treasury</h4>
+                                <span class="text-[#8DD3C7] font-bold">25%</span>
+                            </div>
+                            <p class="text-sm text-gray-300">250,000,000 ORR</p>
+                        </div>
+                        
+                        <!-- Team & Advisors -->
+                        <div class="card p-4 rounded-lg border-l-4 border-l-[#FBBF72]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold">Team & Advisors</h4>
+                                <span class="text-[#FBBF72] font-bold">20%</span>
+                            </div>
+                            <p class="text-sm text-gray-300">200,000,000 ORR</p>
+                        </div>
+                        
+                        <!-- Community & Staking -->
+                        <div class="card p-4 rounded-lg border-l-4 border-l-[#FC8D62]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold">Community & Staking</h4>
+                                <span class="text-[#FC8D62] font-bold">15%</span>
+                            </div>
+                            <p class="text-sm text-gray-300">150,000,000 ORR</p>
+                        </div>
+                        
+                        <!-- Reserve & Partnerships -->
+                        <div class="card p-4 rounded-lg border-l-4 border-l-[#B026FF]">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold">Reserve & Partnerships</h4>
+                                <span class="text-[#B026FF] font-bold">10%</span>
+                            </div>
+                            <p class="text-sm text-gray-300">100,000,000 ORR</p>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6">
+                        <p class="text-gray-300">
+                            Team tokens are locked for 2 years with a 6-month cliff, then vested over 24 months. Treasury funds are governed by ORR holders through on-chain voting.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap" class="py-20 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                <span class="gradient-text">Roadmap</span>
+            </h2>
+            
+            <!-- Desktop Timeline (Horizontal) -->
+            <div class="hidden lg:block relative">
+                <div class="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary/50 to-secondary/50 transform -translate-y-1/2"></div>
+                
+                <div class="grid grid-cols-6 gap-4">
+                    <!-- Q3 2024 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">Q3 2024</h3>
+                            <p class="text-gray-300">Presale begins</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Q4 2024 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">Q4 2024</h3>
+                            <p class="text-gray-300">MVP wallet released</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2025 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2025</h3>
+                            <p class="text-gray-300">Smart node protocol launched</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2026 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2026</h3>
+                            <p class="text-gray-300">ORX stablecoins deployed</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2027 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2027</h3>
+                            <p class="text-gray-300">Testnet for 10k nodes</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2028 -->
+                    <div class="relative pt-16">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg h-full">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2028</h3>
+                            <p class="text-gray-300">Global rollout to 10M users</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Timeline (Vertical) -->
+            <div class="lg:hidden relative">
+                <div class="absolute top-0 left-8 w-1 h-full bg-gradient-to-b from-primary/50 to-secondary/50"></div>
+                
+                <div class="space-y-8">
+                    <!-- Q3 2024 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">Q3 2024</h3>
+                            <p class="text-gray-300">Presale begins</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Q4 2024 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">Q4 2024</h3>
+                            <p class="text-gray-300">MVP wallet released</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2025 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2025</h3>
+                            <p class="text-gray-300">Smart node protocol launched</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2026 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2026</h3>
+                            <p class="text-gray-300">ORX stablecoins deployed</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2027 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2027</h3>
+                            <p class="text-gray-300">Testnet for 10k nodes</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 2028 -->
+                    <div class="relative pl-16">
+                        <div class="absolute top-4 left-8 transform -translate-x-1/2">
+                            <div class="timeline-dot glow"></div>
+                        </div>
+                        
+                        <div class="card p-6 rounded-lg">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold mb-2 text-primary">2028</h3>
+                            <p class="text-gray-300">Global rollout to 10M users</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ -->
+    <section id="faq" class="py-20 px-6 relative bg-[#0C0D20]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                Frequently Asked <span class="gradient-text">Questions</span>
+            </h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-6">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item card p-6 rounded-lg">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold">How is ORX different from USDT?</h3>
+                            <i class="ri-add-line ri-lg text-primary faq-icon"></i>
+                        </div>
+                        
+                        <div class="faq-answer hidden mt-4 text-gray-300">
+                            <p>
+                                Unlike USDT which is backed by Tether's reserves, ORX tokens are fully collateralized by ORR at a 150% ratio. This means each ORX token is backed by $1.50 worth of ORR, providing greater stability and transparency. Additionally, ORX transactions have zero gas fees and settle in under 1 second.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item card p-6 rounded-lg">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold">Is KYC required to use Oranthor?</h3>
+                            <i class="ri-add-line ri-lg text-primary faq-icon"></i>
+                        </div>
+                        
+                        <div class="faq-answer hidden mt-4 text-gray-300">
+                            <p>
+                                No, Oranthor is designed to be permissionless and privacy-preserving. You can create a wallet and begin using the network without KYC. However, certain fiat on/off ramps may require KYC due to local regulations, but the core protocol remains KYC-free.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item card p-6 rounded-lg">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold">How does the quorum validation work?</h3>
+                            <i class="ri-add-line ri-lg text-primary faq-icon"></i>
+                        </div>
+                        
+                        <div class="faq-answer hidden mt-4 text-gray-300">
+                            <p>
+                                Oranthor uses a k/n quorum system where a transaction is validated when k out of n randomly selected nodes reach consensus. This provides security without requiring every node to validate every transaction, enabling our sub-second finality. The quorum size scales dynamically based on transaction value and network conditions.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item card p-6 rounded-lg">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold">What happens if I lose my device?</h3>
+                            <i class="ri-add-line ri-lg text-primary faq-icon"></i>
+                        </div>
+                        
+                        <div class="faq-answer hidden mt-4 text-gray-300">
+                            <p>
+                                Oranthor uses a recovery system based on Shamir's Secret Sharing. During wallet setup, you can designate trusted recovery contacts or store recovery shards. With these shards, you can restore your wallet on a new device. We recommend setting up multiple recovery options for maximum security.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Item 5 -->
+                    <div class="faq-item card p-6 rounded-lg">
+                        <div class="faq-question flex justify-between items-center cursor-pointer">
+                            <h3 class="text-xl font-['Space_Grotesk'] font-semibold">How can I earn with Oranthor?</h3>
+                            <i class="ri-add-line ri-lg text-primary faq-icon"></i>
+                        </div>
+                        
+                        <div class="faq-answer hidden mt-4 text-gray-300">
+                            <p>
+                                There are multiple ways to earn with Oranthor:
+                            </p>
+                            <ul class="list-disc pl-6 mt-2 space-y-2">
+                                <li>Stake ORR to earn protocol fees</li>
+                                <li>Run a validator node to earn validation rewards</li>
+                                <li>Provide liquidity for ORX minting</li>
+                                <li>Participate in governance to earn proposal rewards</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 relative">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="card p-12 rounded-xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        Join the <span class="gradient-text">Oranthor</span> Revolution
+                    </h2>
+                    
+                    <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                        Be part of the next generation of decentralized finance. Secure your position in the Oranthor ecosystem today.
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="px-8 py-3 bg-primary text-black font-semibold transition-all duration-300 hover:scale-105 !rounded-button whitespace-nowrap glow">
+                            Join Presale
+                        </button>
+                        
+                        <button class="px-8 py-3 bg-transparent border border-white text-white font-semibold transition-all duration-300 hover:border-secondary hover:text-secondary !rounded-button whitespace-nowrap">
+                            Read Whitepaper
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 relative bg-[#080915]">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-divider mb-16"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-6 inline-block">Oranthor</a>
+                    
+                    <p class="text-gray-300 mb-6">
+                        A new era of trustless finance, powered by the Oranthor Foundation.
+                    </p>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#141528] text-white hover:bg-primary hover:text-black transition-colors">
+                            <i class="ri-twitter-x-line"></i>
+                        </a>
+                        
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#141528] text-white hover:bg-primary hover:text-black transition-colors">
+                            <i class="ri-discord-line"></i>
+                        </a>
+                        
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#141528] text-white hover:bg-primary hover:text-black transition-colors">
+                            <i class="ri-github-line"></i>
+                        </a>
+                        
+                        <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#141528] text-white hover:bg-primary hover:text-black transition-colors">
+                            <i class="ri-telegram-line"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Resources</h3>
+                    
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Whitepaper</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">GitHub</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Company</h3>
+                    
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Press Kit</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Subscribe</h3>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Stay updated with the latest news and announcements.
+                    </p>
+                    
+                    <form class="space-y-4">
+                        <div class="relative">
+                            <input type="email" placeholder="Your email address" class="w-full px-4 py-3 bg-[#141528] border border-gray-700 rounded-lg focus:outline-none focus:border-primary text-white">
+                        </div>
+                        
+                        <button type="submit" class="w-full px-4 py-3 bg-primary text-black font-semibold transition-all duration-300 hover:bg-primary/90 !rounded-button whitespace-nowrap">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="section-divider my-12"></div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2025 Oranthor Foundation. All rights reserved.
+                </p>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-primary text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-primary text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-primary text-sm">Legal</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script id="mobileMenuScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenuButton.innerHTML = '<i class="ri-menu-line ri-lg"></i>';
+                } else {
+                    mobileMenuButton.innerHTML = '<i class="ri-close-line ri-lg"></i>';
+                }
+            });
+            
+            // Close mobile menu when clicking on a link
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.innerHTML = '<i class="ri-menu-line ri-lg"></i>';
+                });
+            });
+        });
+    </script>
+
+    <script id="faqScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+                
+                question.addEventListener('click', function() {
+                    answer.classList.toggle('hidden');
+                    
+                    if (answer.classList.contains('hidden')) {
+                        icon.classList.remove('ri-subtract-line');
+                        icon.classList.add('ri-add-line');
+                    } else {
+                        icon.classList.remove('ri-add-line');
+                        icon.classList.add('ri-subtract-line');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script id="tokenomicsChartScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const chartDom = document.getElementById('tokenomics-chart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                animation: false,
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c}M ORR ({d}%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: 10,
+                    top: 'center',
+                    textStyle: {
+                        color: '#E5E5E5'
+                    }
+                },
+                series: [
+                    {
+                        name: 'ORR Distribution',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#0A0B1E',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 16,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: [
+                            { value: 300, name: 'Public Sale', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+                            { value: 250, name: 'Treasury', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+                            { value: 200, name: 'Team & Advisors', itemStyle: { color: 'rgba(251, 191, 114, 1)' } },
+                            { value: 150, name: 'Community & Staking', itemStyle: { color: 'rgba(252, 141, 98, 1)' } },
+                            { value: 100, name: 'Reserve & Partnerships', itemStyle: { color: 'rgba(176, 38, 255, 1)' } }
+                        ]
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        });
+    </script>
+
+    <script id="networkVisualizationScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('network-visualization');
+            
+            // Create nodes
+            for (let i = 0; i < 30; i++) {
+                const node = document.createElement('div');
+                node.className = 'absolute w-3 h-3 rounded-full';
+                
+                // Random position
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                
+                // Random color (blue or purple)
+                const color = Math.random() > 0.5 ? '#00F0FF' : '#B026FF';
+                
+                node.style.top = `${top}%`;
+                node.style.left = `${left}%`;
+                node.style.backgroundColor = color;
+                node.style.boxShadow = `0 0 10px ${color}`;
+                
+                container.appendChild(node);
+            }
+            
+            // Create connections
+            const nodes = container.querySelectorAll('div');
+            
+            for (let i = 0; i < 40; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'absolute bg-white/20';
+                
+                // Random nodes to connect
+                const nodeIndex1 = Math.floor(Math.random() * nodes.length);
+                let nodeIndex2 = Math.floor(Math.random() * nodes.length);
+                
+                // Ensure we don't connect a node to itself
+                while (nodeIndex1 === nodeIndex2) {
+                    nodeIndex2 = Math.floor(Math.random() * nodes.length);
+                }
+                
+                const node1 = nodes[nodeIndex1];
+                const node2 = nodes[nodeIndex2];
+                
+                // Get positions
+                const top1 = parseFloat(node1.style.top);
+                const left1 = parseFloat(node1.style.left);
+                const top2 = parseFloat(node2.style.top);
+                const left2 = parseFloat(node2.style.left);
+                
+                // Calculate line properties
+                const length = Math.sqrt(Math.pow(top2 - top1, 2) + Math.pow(left2 - left1, 2));
+                const angle = Math.atan2(top2 - top1, left2 - left1) * 180 / Math.PI;
+                
+                // Set line properties
+                connection.style.width = `${length}%`;
+                connection.style.height = '1px';
+                connection.style.top = `${top1 + 1.5}%`;
+                connection.style.left = `${left1 + 1.5}%`;
+                connection.style.transformOrigin = '0 0';
+                connection.style.transform = `rotate(${angle}deg)`;
+                
+                container.appendChild(connection);
+            }
+        });
+    </script>
+
+    <script id="orbitingNodesScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('orbiting-nodes');
+            
+            // Create orbiting nodes
+            for (let i = 0; i < 12; i++) {
+                const node = document.createElement('div');
+                node.className = 'absolute w-4 h-4 rounded-full bg-white/80 flex items-center justify-center';
+                
+                // Position on circle
+                const angle = (i / 12) * 2 * Math.PI;
+                const radius = 120; // Radius of orbit
+                
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                node.style.transform = `translate(${x}px, ${y}px)`;
+                
+                // Random animation duration
+                const duration = 20 + Math.random() * 10;
+                node.style.animation = `orbit ${duration}s linear infinite`;
+                
+                container.appendChild(node);
+            }
+        });
+    </script>
+
+    <script id="particlesScript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('particles-container');
+            
+            // Create stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size
+                const size = Math.random() * 2 + 1;
+                
+                // Random position
+                const top = Math.random() * 100;
+                const left = Math.random() * 100;
+                
+                // Random opacity
+                const opacity = Math.random() * 0.5 + 0.3;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${top}%`;
+                star.style.left = `${left}%`;
+                star.style.opacity = opacity;
+                
+                // Random animation
+                const animationDuration = Math.random() * 3 + 2;
+                star.style.animation = `twinkle ${animationDuration}s infinite alternate`;
+                
+                container.appendChild(star);
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        }
+    </style>
+</body>
+</html>

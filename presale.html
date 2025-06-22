@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presale ORR Dashboard (Testnet)</title>
+  <title>Presale ORR Dashboard)</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.5/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.1.2/bignumber.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script> <!-- WalletConnect -->
@@ -172,31 +172,31 @@
 <body>
 <div class="container">
   <div class="header">Presale ORR Dashboard (Testnet)</div>
-  <div class="status" id="walletStatus">Chưa kết nối ví</div>
+  <div class="status" id="walletStatus">Wallet not connected</div>
   <div class="status" id="networkStatus"></div>
   <div class="input-group">
-    <label for="orrAmount">Số lượng ORR muốn mua: <span id="desiredOrrAmount">-</span></label><br>
-    <input type="number" id="orrAmount" placeholder="Nhập số ORR" min="0" step="1">
+    <label for="orrAmount">Amount of ORR to purchase: <span id="desiredOrrAmount">-</span></label><br>
+    <input type="number" id="orrAmount" placeholder="Enter the amount of ORR" min="0" step="1">
   </div>
-  <div class="info">USDT cần trả: <span id="usdtRequired">-</span></div>
-  <div class="info">Vòng hiện tại: <span id="roundInfo">-</span></div>
-  <div class="info">Giá ORR hiện tại: <span id="currentPrice">-</span></div>
-  <div class="info">Số dư USDT của bạn: <span id="userUsdtBalance">-</span></div>
-  <div class="info">ORR đã bán vòng hiện tại: <span id="soldPerRound">-</span></div>
-  <div class="info">Tổng ORR đã bán: <span id="totalSold">-</span></div>
-  <div class="info">Trạng thái presale: <span id="idoStatus">-</span></div>
-  <div class="info">Thời gian còn lại: <span id="countdown">-</span></div>
-  <div class="info">Tổng đã mua: <span id="totalPurchased">-</span></div>
-  <div class="info">Đã claim: <span id="claimed">-</span></div>
-  <div class="info">Số ORR có thể claim: <span id="claimable">-</span></div>
-  <button class="btn-buy" id="buyButton" onclick="approveAndBuy()" disabled>Mua ORR</button>
-  <button class="btn-claim" id="claimButton" onclick="claimORR()" disabled>Claim ORR</button>
-  <button class="btn-info" id="infoButton" onclick="showMyPurchase()" disabled>Chi tiết mua</button>
-  <div id="purchaseInfo"></div>
-  <div id="errorMessage" class="error"></div>
-  <div class="loader" id="loader"></div>
-  <p class="note">Miễn trừ trách nhiệm: Token ORR không đại diện cho cổ phần, thu nhập hay lợi nhuận. Đây không phải là lời mời đầu tư.</p>
-  <p class="testnet-note">Đây là môi trường testnet. Sử dụng faucet để nhận testnet ETH/USDT nếu cần.</p>
+ <div class="info">USDT Required: <span id="usdtRequired">-</span></div>
+<div class="info">Current Round: <span id="roundInfo">-</span></div>
+<div class="info">Current ORR Price: <span id="currentPrice">-</span></div>
+<div class="info">Your USDT Balance: <span id="userUsdtBalance">-</span></div>
+<div class="info">ORR Sold This Round: <span id="soldPerRound">-</span></div>
+<div class="info">Total ORR Sold: <span id="totalSold">-</span></div>
+<div class="info">Presale Status: <span id="idoStatus">-</span></div>
+<div class="info">Time Remaining: <span id="countdown">-</span></div>
+<div class="info">Total Purchased: <span id="totalPurchased">-</span></div>
+<div class="info">Claimed: <span id="claimed">-</span></div>
+<div class="info">Claimable ORR: <span id="claimable">-</span></div>
+<button class="btn-buy" id="buyButton" onclick="approveAndBuy()" disabled>Buy ORR</button>
+<button class="btn-claim" id="claimButton" onclick="claimORR()" disabled>Claim ORR</button>
+<button class="btn-info" id="infoButton" onclick="showMyPurchase()" disabled>Purchase Details</button>
+<div id="purchaseInfo"></div>
+<div id="errorMessage" class="error"></div>
+<div class="loader" id="loader"></div>
+<p class="note">Disclaimer: ORR token does not represent any equity, income, or profit. This is not an investment offer.</p>
+<p class="testnet-note">Please make sure your wallet is connected. If the data is not displaying correctly, try reloading the page.</p>
 </div>
 
 <script>
@@ -710,7 +710,7 @@ async function initWeb3() {
 
       window.ethereum.on('accountsChanged', async (accounts) => {
         if (!accounts.length) {
-          document.getElementById("walletStatus").innerText = "Chưa kết nối ví";
+          document.getElementById("walletStatus").innerText = "Wallet not connected";
           toggleButtons(true);
         } else {
           account = accounts[0];
@@ -770,7 +770,7 @@ function initWalletConnect() {
     });
 
     walletConnectProvider.on("disconnect", () => {
-      document.getElementById("walletStatus").innerText = "Chưa kết nối ví";
+      document.getElementById("walletStatus").innerText = "Wallet not connected";
       toggleButtons(true);
       presaleCache = null;
     });

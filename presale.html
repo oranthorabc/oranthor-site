@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presale ORR Dashboard)</title>
+  <title>Presale ORR Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.5/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.1.2/bignumber.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script> <!-- WalletConnect -->
@@ -171,7 +171,7 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">Presale ORR Dashboard (Testnet)</div>
+  <div class="header">Presale ORR Dashboard</div>
   <div class="status" id="walletStatus">Wallet not connected</div>
   <div class="status" id="networkStatus"></div>
   <div class="input-group">
@@ -697,7 +697,7 @@ async function initWeb3() {
       const accounts = await web3.eth.getAccounts();
       if (!accounts.length) throw new Error("Không tìm thấy tài khoản");
       account = accounts[0];
-      document.getElementById("walletStatus").innerText = `Đã kết nối: ${account.slice(0, 6)}...${account.slice(-4)}`;
+      document.getElementById("walletStatus").innerText = `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`;
 
       presale = new web3.eth.Contract(presaleABI, presaleAddress);
       usdt = new web3.eth.Contract(usdtABI, usdtAddress);
@@ -714,7 +714,7 @@ async function initWeb3() {
           toggleButtons(true);
         } else {
           account = accounts[0];
-          document.getElementById("walletStatus").innerText = `Đã kết nối: ${account.slice(0, 6)}...${account.slice(-4)}`;
+          document.getElementById("walletStatus").innerText = `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`;
           if (await checkNetwork()) {
             toggleButtons(false);
             updatePresaleInfo(true);
@@ -731,12 +731,12 @@ async function initWeb3() {
         }
       });
     } catch (err) {
-      showError("Không thể kết nối ví MetaMask: " + err.message);
+      showError("Unable to connect wallet MetaMask: " + err.message);
       // Fallback to WalletConnect
       initWalletConnect();
     }
   } else {
-    showError("Vui lòng cài đặt MetaMask hoặc sử dụng WalletConnect!");
+    showError("Setup MetaMask or use WalletConnect!");
     initWalletConnect();
   }
 }
@@ -756,7 +756,7 @@ function initWalletConnect() {
       web3 = new Web3(walletConnectProvider);
       web3.eth.getAccounts().then(accounts => {
         account = accounts[0];
-        document.getElementById("walletStatus").innerText = `Đã kết nối WC: ${account.slice(0, 6)}...${account.slice(-4)}`;
+        document.getElementById("walletStatus").innerText = `Connected WC: ${account.slice(0, 6)}...${account.slice(-4)}`;
         presale = new web3.eth.Contract(presaleABI, presaleAddress);
         usdt = new web3.eth.Contract(usdtABI, usdtAddress);
         orr = new web3.eth.Contract(orrABI, orrAddress);

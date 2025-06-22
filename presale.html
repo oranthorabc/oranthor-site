@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presale ORR Dashboard</title>
+  <title>Presale ORR Dashboard (Testnet)</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.5/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bignumber.js@9.1.2/bignumber.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script> <!-- WalletConnect -->
@@ -171,32 +171,32 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">Presale ORR Dashboard</div>
+  <div class="header">Presale ORR Dashboard (Testnet)</div>
   <div class="status" id="walletStatus">Wallet not connected</div>
   <div class="status" id="networkStatus"></div>
   <div class="input-group">
-    <label for="orrAmount">Amount of ORR to purchase: <span id="desiredOrrAmount">-</span></label><br>
-    <input type="number" id="orrAmount" placeholder="Enter the amount of ORR" min="0" step="1">
+    <label for="orrAmount">Amount of ORR to buy: <span id="desiredOrrAmount">-</span></label><br>
+    <input type="number" id="orrAmount" placeholder="Enter ORR amount" min="0" step="1">
   </div>
- <div class="info">USDT Required: <span id="usdtRequired">-</span></div>
-<div class="info">Current Round: <span id="roundInfo">-</span></div>
-<div class="info">Current ORR Price: <span id="currentPrice">-</span></div>
-<div class="info">Your USDT Balance: <span id="userUsdtBalance">-</span></div>
-<div class="info">ORR Sold This Round: <span id="soldPerRound">-</span></div>
-<div class="info">Total ORR Sold: <span id="totalSold">-</span></div>
-<div class="info">Presale Status: <span id="idoStatus">-</span></div>
-<div class="info">Time Remaining: <span id="countdown">-</span></div>
-<div class="info">Total Purchased: <span id="totalPurchased">-</span></div>
-<div class="info">Claimed: <span id="claimed">-</span></div>
-<div class="info">Claimable ORR: <span id="claimable">-</span></div>
-<button class="btn-buy" id="buyButton" onclick="approveAndBuy()" disabled>Buy ORR</button>
-<button class="btn-claim" id="claimButton" onclick="claimORR()" disabled>Claim ORR</button>
-<button class="btn-info" id="infoButton" onclick="showMyPurchase()" disabled>Purchase Details</button>
-<div id="purchaseInfo"></div>
-<div id="errorMessage" class="error"></div>
-<div class="loader" id="loader"></div>
-<p class="note">Disclaimer: ORR token does not represent any equity, income, or profit. This is not an investment offer.</p>
-<p class="testnet-note">Please make sure your wallet is connected. If the data is not displaying correctly, try reloading the page.</p>
+  <div class="info">USDT required: <span id="usdtRequired">-</span></div>
+  <div class="info">Current round: <span id="roundInfo">-</span></div>
+  <div class="info">Current ORR price: <span id="currentPrice">-</span></div>
+  <div class="info">Your USDT balance: <span id="userUsdtBalance">-</span></div>
+  <div class="info">ORR sold in current round: <span id="soldPerRound">-</span></div>
+  <div class="info">Total ORR sold: <span id="totalSold">-</span></div>
+  <div class="info">Presale status: <span id="idoStatus">-</span></div>
+  <div class="info">Time remaining: <span id="countdown">-</span></div>
+  <div class="info">Total purchased: <span id="totalPurchased">-</span></div>
+  <div class="info">Claimed: <span id="claimed">-</span></div>
+  <div class="info">Claimable ORR: <span id="claimable">-</span></div>
+  <button class="btn-buy" id="buyButton" onclick="approveAndBuy()" disabled>Buy ORR</button>
+  <button class="btn-claim" id="claimButton" onclick="claimORR()" disabled>Claim ORR</button>
+  <button class="btn-info" id="infoButton" onclick="showMyPurchase()" disabled>Purchase Details</button>
+  <div id="purchaseInfo"></div>
+  <div id="errorMessage" class="error"></div>
+  <div class="loader" id="loader"></div>
+  <p class="note">Disclaimer: ORR tokens do not represent equity, income, or profits. This is not an investment solicitation.</p>
+  <p class="testnet-note">This is a testnet environment. Use a faucet to obtain testnet ETH/USDT if needed.</p>
 </div>
 
 <script>
@@ -651,12 +651,12 @@ let orr;
 let walletConnectProvider;
 
 let presaleCache = null;
-const CACHE_DURATION = 10000; // 10 giây
+const CACHE_DURATION = 10000; // 10 seconds
 
 function showError(message) {
   const errorDiv = document.getElementById("errorMessage");
   if (!errorDiv) {
-    console.error("📛 Không tìm thấy phần tử errorMessage trong DOM");
+    console.error("📛 Error element 'errorMessage' not found in DOM");
     return;
   }
   errorDiv.innerText = message;
@@ -675,27 +675,27 @@ async function checkNetwork() {
     const chainId = await web3.eth.getChainId();
     const networkName = testnetNames[chainId] || `Unknown (Chain ID: ${chainId})`;
     if (chainId.toString() !== expectedChainId) {
-      showError(`Vui lòng chuyển sang ${testnetNames[expectedChainId] || "mạng testnet phù hợp"} (Chain ID: ${expectedChainId})`);
-      document.getElementById("networkStatus").innerText = `Mạng không đúng: ${networkName}`;
+      showError(`Please switch to ${testnetNames[expectedChainId] || "the appropriate testnet"} (Chain ID: ${expectedChainId})`);
+      document.getElementById("networkStatus").innerText = `Incorrect network: ${networkName}`;
       toggleButtons(true);
       return false;
     }
-    document.getElementById("networkStatus").innerText = `Mạng: ${networkName}`;
+    document.getElementById("networkStatus").innerText = `Network: ${networkName}`;
     return true;
   } catch (err) {
-    showError("Không thể kiểm tra mạng: " + err.message);
+    showError("Unable to check network: " + err.message);
     return false;
   }
 }
 
 async function initWeb3() {
   if (window.ethereum) {
-    // Ưu tiên MetaMask
+    // Prioritize MetaMask
     web3 = new Web3(window.ethereum);
     try {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const accounts = await web3.eth.getAccounts();
-      if (!accounts.length) throw new Error("Không tìm thấy tài khoản");
+      if (!accounts.length) throw new Error("No accounts found");
       account = accounts[0];
       document.getElementById("walletStatus").innerText = `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`;
 
@@ -731,12 +731,12 @@ async function initWeb3() {
         }
       });
     } catch (err) {
-      showError("Unable to connect wallet MetaMask: " + err.message);
+      showError("Unable to connect MetaMask wallet: " + err.message);
       // Fallback to WalletConnect
       initWalletConnect();
     }
   } else {
-    showError("Setup MetaMask or use WalletConnect!");
+    showError("Please install MetaMask or use WalletConnect!");
     initWalletConnect();
   }
 }
@@ -744,12 +744,12 @@ async function initWeb3() {
 function initWalletConnect() {
   if (typeof window.WalletConnectProvider !== 'undefined') {
     walletConnectProvider = new WalletConnectProvider({
-      infuraId: "YOUR_INFURA_ID", // Thay bằng Infura ID của bạn
+      infuraId: "YOUR_INFURA_ID", // Replace with your Infura ID
       rpc: {
-        97: "https://data-seed-prebsc-1-s1.binance.org:8545/" // RPC cho BSC Testnet
+        97: "https://data-seed-prebsc-1-s1.binance.org:8545/" // RPC for BSC Testnet
       },
       chainId: 97,
-      qrcode: true // Hiển thị QR code trên mobile
+      qrcode: true // Display QR code on mobile
     });
 
     walletConnectProvider.on("connect", () => {
@@ -776,10 +776,10 @@ function initWalletConnect() {
     });
 
     walletConnectProvider.enable().catch(err => {
-      showError("Không thể kết nối WalletConnect: " + err.message);
+      showError("Unable to connect WalletConnect: " + err.message);
     });
   } else {
-    showError("Không thể khởi tạo WalletConnect. Vui lòng kiểm tra kết nối internet.");
+    showError("Unable to initialize WalletConnect. Please check your internet connection.");
   }
 }
 
@@ -848,9 +848,9 @@ async function updatePresaleInfo(force = false) {
     presaleCache = { data: cacheData, timestamp: Date.now() };
 
     function updateUI(data) {
-      document.getElementById("roundInfo").innerText = `Vòng ${data.round || 'Chưa khởi tạo'}`;
-      document.getElementById("currentPrice").innerText = data.price ? new BigNumber(data.price).div(Math.pow(10, data.orrDecimals)).toFixed(6) + " " + data.usdtSymbol : "Chưa thiết lập giá";
-      document.getElementById("idoStatus").innerText = data.idoCompleted ? "Đã kết thúc" : "Chưa kết thúc";
+      document.getElementById("roundInfo").innerText = `Round ${data.round || 'Not initialized'}`;
+      document.getElementById("currentPrice").innerText = data.price ? new BigNumber(data.price).div(Math.pow(10, data.orrDecimals)).toFixed(6) + " " + data.usdtSymbol : "Price not set";
+      document.getElementById("idoStatus").innerText = data.idoCompleted ? "Completed" : "Ongoing";
       document.getElementById("totalSold").innerText = new BigNumber(data.totalSold).div(Math.pow(10, data.orrDecimals)).toFixed(2) + " ORR";
       document.getElementById("soldPerRound").innerText = new BigNumber(data.soldPerRound).div(Math.pow(10, data.orrDecimals)).toFixed(2) + " ORR";
       document.getElementById("totalPurchased").innerText = new BigNumber(data.buyerInfo.totalPurchased).div(Math.pow(10, data.orrDecimals)).toFixed(2) + " ORR";
@@ -880,13 +880,13 @@ async function updatePresaleInfo(force = false) {
         const maxDuration = 60 * 24 * 3600; // 60 days
         const startTime = Number(data.idoStartTime);
         if (isNaN(startTime) || startTime === 0) {
-          document.getElementById("countdown").innerText = "Chưa bắt đầu presale";
+          document.getElementById("countdown").innerText = "Presale not started";
           document.getElementById("buyButton").disabled = true;
         } else {
           const elapsed = now - startTime;
           const remaining = maxDuration - (elapsed > 0 ? elapsed : 0);
           if (remaining <= 0 || data.idoCompleted) {
-            document.getElementById("countdown").innerText = "Vòng đã kết thúc";
+            document.getElementById("countdown").innerText = "Round ended";
             document.getElementById("buyButton").disabled = true;
           } else {
             document.getElementById("countdown").innerText = formatTime(remaining);
@@ -900,7 +900,7 @@ async function updatePresaleInfo(force = false) {
 
     updateUI(cacheData);
   } catch (err) {
-    showError("Lỗi khi tải thông tin presale: " + err.message);
+    showError("Error loading presale info: " + err.message);
   } finally {
     document.getElementById("loader").style.display = "none";
   }
@@ -911,12 +911,12 @@ async function approveAndBuy() {
   const buyBtn = document.getElementById("buyButton");
 
   if (amount <= 0 || isNaN(amount)) {
-    showError("Vui lòng nhập số lượng ORR hợp lệ!");
+    showError("Please enter a valid ORR amount!");
     return;
   }
 
   buyBtn.disabled = true;
-  buyBtn.innerText = "Đang xử lý...";
+  buyBtn.innerText = "Processing...";
 
   try {
     const orrDecimals = await orr.methods.decimals().call();
@@ -927,7 +927,7 @@ async function approveAndBuy() {
     const totalSold = await presale.methods.totalSold().call();
 
     if (idoCompleted || round > 3) {
-      showError("Presale đã kết thúc hoặc hết vòng!");
+      showError("Presale has ended or rounds are complete!");
       resetBuyButton();
       return;
     }
@@ -940,14 +940,14 @@ async function approveAndBuy() {
 
     const maxSale = new BigNumber(180_000_000).multipliedBy(Math.pow(10, orrDecimals));
     if (new BigNumber(totalSold).plus(orrAmount).gt(maxSale)) {
-      showError("Đã vượt giới hạn presale!");
+      showError("Presale limit exceeded!");
       resetBuyButton();
       return;
     }
 
     const balance = await usdt.methods.balanceOf(account).call();
     if (new BigNumber(balance).lt(usdtAmount)) {
-      showError("Số dư USDT không đủ! Sử dụng faucet testnet.");
+      showError("Insufficient USDT balance! Use a testnet faucet.");
       resetBuyButton();
       return;
     }
@@ -960,16 +960,16 @@ async function approveAndBuy() {
         usdt.methods.approve(presaleAddress, usdtAmount.toString())
           .send({ from: account, gas: gasApprove })
           .on("transactionHash", (hash) => {
-            console.log("📤 Approve gửi:", hash);
-            buyBtn.innerText = "✅ Đã approve, đang mua...";
+            console.log("📤 Approve sent:", hash);
+            buyBtn.innerText = "✅ Approved, buying...";
           })
           .on("receipt", (receipt) => {
-            console.log("✅ Approve thành công:", receipt.transactionHash);
+            console.log("✅ Approve successful:", receipt.transactionHash);
             resolve();
           })
           .on("error", (err) => {
-            console.error("❌ Lỗi approve:", err);
-            showError("❌ Giao dịch approve thất bại.\nChi tiết: " + err.message);
+            console.error("❌ Approve error:", err);
+            showError("❌ Approve transaction failed.\nDetails: " + err.message);
             resetBuyButton();
             reject(new Error("STOP"));
           });
@@ -982,12 +982,12 @@ async function approveAndBuy() {
       presale.methods.buy(usdtAmount.toString())
         .send({ from: account, gas: gasBuy })
         .on("transactionHash", (hash) => {
-          console.log("📤 Gửi giao dịch mua:", hash);
-          buyBtn.innerText = "⏳ Đang chờ xác nhận...";
+          console.log("📤 Buy transaction sent:", hash);
+          buyBtn.innerText = "⏳ Awaiting confirmation...";
         })
         .on("receipt", (receipt) => {
-          console.log("✅ Mua thành công:", receipt.transactionHash);
-          showError("🎉 Mua ORR thành công!");
+          console.log("✅ Buy successful:", receipt.transactionHash);
+          showError("🎉 ORR purchase successful!");
           document.getElementById("orrAmount").value = "";
           document.getElementById("usdtRequired").innerText = "-";
           updatePresaleInfo(true).then(() => {
@@ -997,16 +997,16 @@ async function approveAndBuy() {
           resolve();
         })
         .on("error", (err) => {
-          console.error("❌ Lỗi khi mua:", err);
-          showError("❌ Giao dịch bị từ chối hoặc lỗi kết nối.\nChi tiết: " + err.message);
+          console.error("❌ Buy error:", err);
+          showError("❌ Transaction rejected or connection error.\nDetails: " + err.message);
           resetBuyButton();
-          reject(new Error("Lỗi giao dịch"));
+          reject(new Error("Transaction error"));
         });
     });
   } catch (err) {
     if (err.message === "STOP") return;
-    console.error("❌ Lỗi tổng thể:", err);
-    showError("Mua thất bại: " + err.message);
+    console.error("❌ General error:", err);
+    showError("Purchase failed: " + err.message);
     resetBuyButton();
   }
 }
@@ -1014,7 +1014,7 @@ async function approveAndBuy() {
 function resetBuyButton() {
   const btn = document.getElementById("buyButton");
   btn.disabled = false;
-  btn.innerText = "Mua ORR";
+  btn.innerText = "Buy ORR";
   const updateUsdtRequired = debounce(async () => {
     const value = Number(document.getElementById("orrAmount").value);
     if (presaleCache && presaleCache.data) {
@@ -1037,19 +1037,19 @@ function resetBuyButton() {
 async function claimORR() {
   const claimButton = document.getElementById("claimButton");
   claimButton.disabled = true;
-  claimButton.innerText = "Đang xử lý...";
+  claimButton.innerText = "Processing...";
 
   try {
     const idoCompleted = await presale.methods.idoCompleted().call();
     if (!idoCompleted) {
-      showError("Presale chưa kết thúc, chưa thể claim!");
-      throw new Error("Presale chưa kết thúc");
+      showError("Presale not completed, cannot claim yet!");
+      throw new Error("Presale not completed");
     }
 
     const claimableAmount = await presale.methods.claimable(account).call();
     if (new BigNumber(claimableAmount).lte(0)) {
-      showError("Không có ORR nào để claim!");
-      throw new Error("Không có ORR nào để claim");
+      showError("No ORR available to claim!");
+      throw new Error("No ORR available to claim");
     }
 
     const gasClaim = await presale.methods.claim().estimateGas({ from: account });
@@ -1058,17 +1058,17 @@ async function claimORR() {
       presale.methods.claim()
         .send({ from: account, gas: gasClaim })
         .on("transactionHash", (hash) => {
-          console.log("📤 Claim gửi:", hash);
-          claimButton.innerText = "⏳ Đang chờ xác nhận...";
+          console.log("📤 Claim sent:", hash);
+          claimButton.innerText = "⏳ Awaiting confirmation...";
         })
         .on("receipt", (receipt) => {
-          console.log("✅ Claim thành công:", receipt.transactionHash);
-          showError("🎉 Claim ORR thành công!");
+          console.log("✅ Claim successful:", receipt.transactionHash);
+          showError("🎉 ORR claim successful!");
           resolve();
         })
         .on("error", (err) => {
-          console.error("❌ Lỗi claim:", err);
-          showError("❌ Claim thất bại.\nChi tiết: " + err.message);
+          console.error("❌ Claim error:", err);
+          showError("❌ Claim failed.\nDetails: " + err.message);
           reject(err);
         });
     });
@@ -1076,8 +1076,8 @@ async function claimORR() {
     showMyPurchase();
     updatePresaleInfo(true);
   } catch (err) {
-    console.error("Lỗi claim:", err);
-    showError("Claim thất bại: " + err.message);
+    console.error("Claim error:", err);
+    showError("Claim failed: " + err.message);
   } finally {
     claimButton.disabled = false;
     claimButton.innerText = "Claim ORR";
@@ -1094,15 +1094,15 @@ async function showMyPurchase() {
     const claimed = buyerInfo[1] || "0";
 
     document.getElementById("purchaseInfo").innerText = 
-      `Tổng đã mua: ${new BigNumber(totalPurchased).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR\n` +
-      `Đã claim: ${new BigNumber(claimed).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR\n` +
-      `Có thể claim: ${new BigNumber(claimableAmount).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR`;
+      `Total purchased: ${new BigNumber(totalPurchased).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR\n` +
+      `Claimed: ${new BigNumber(claimed).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR\n` +
+      `Claimable: ${new BigNumber(claimableAmount).div(Math.pow(10, orrDecimals)).toFixed(2)} ORR`;
     document.getElementById("totalPurchased").innerText = new BigNumber(totalPurchased).div(Math.pow(10, orrDecimals)).toFixed(2) + " ORR";
     document.getElementById("claimed").innerText = new BigNumber(claimed).div(Math.pow(10, orrDecimals)).toFixed(2) + " ORR";
     document.getElementById("claimable").innerText = new BigNumber(claimableAmount).div(Math.pow(10, orrDecimals)).toFixed(2) + " ORR";
   } catch (err) {
     console.error("Purchase info error:", err);
-    showError("Lỗi khi lấy thông tin mua: " + err.message);
+    showError("Error fetching purchase info: " + err.message);
   }
 }
 
